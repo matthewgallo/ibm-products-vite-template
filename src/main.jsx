@@ -8,10 +8,12 @@ import './config';
 import Example from './Example/Example';
 import { ThemeProvider } from './ThemeSelector/ThemeContext';
 import { ThemeDropdown } from './ThemeSelector/ThemeDropdown';
+import { UIShellHeader } from './Example/Header';
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider>
+      <UIShellHeader />
       <Example />
       <ThemeDropdown />
     </ThemeProvider>

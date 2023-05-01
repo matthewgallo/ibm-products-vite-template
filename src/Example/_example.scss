@@ -1,7 +1,16 @@
 @use '@carbon/react/scss/spacing';
+@use '@carbon/styles/scss/theme' as *;
+@use '@carbon/styles/scss/themes';
+
+$storybook-block-class: c4p--notifications-panel__story;
+
+.#{$storybook-block-class}--header {
+  @include theme(themes.$g100);
+}
 
 .datagrid-example-container {
   max-width: 900px;
+  margin-top: 3rem;
 }
 
 .custom-cell-wrapper {
