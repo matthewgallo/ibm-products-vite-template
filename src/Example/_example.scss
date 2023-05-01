@@ -1,0 +1,17 @@
+@use '@carbon/react/scss/spacing';
+
+.datagrid-example-container {
+  max-width: 900px;
+}
+
+.custom-cell-wrapper {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.intro-text {
+  display: flex;
+  align-items: center;
+  padding-bottom: spacing.$spacing-06;
+}

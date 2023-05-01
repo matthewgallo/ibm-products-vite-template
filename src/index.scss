@@ -1,0 +1,20 @@
+@use '@carbon/react/scss/spacing';
+@use '@carbon/react/scss/compat/themes' as compat;
+@use '@carbon/react/scss/themes';
+@use '@carbon/react/scss/theme' with
+  ($fallback: compat.$g100, $theme: themes.$g100);
+@use '@carbon/react';
+@use '@carbon/ibm-products/css/index';
+@use '@carbon/react/scss/type';
+@use '@carbon/react/scss/components/code-snippet';
+
+@use './Example/example';
+
+:root {
+  @include theme.theme();
+}
+
+body {
+  margin: 0;
+  padding: spacing.$spacing-05;
+}
