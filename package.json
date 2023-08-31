@@ -8,8 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@carbon/ibm-products": "^2.1.2",
-    "@carbon/react": "^1.31.3",
+    "@carbon/ibm-products": "^2.8.1",
+    "@carbon/react": "^1.36.0",
     "classnames": "^2.3.2",
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
