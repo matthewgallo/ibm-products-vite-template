@@ -6,13 +6,53 @@ on:
 env:
   TYPESCRIPT_PROJECT_URL: https://github.com/users/matthewgallo/projects/1
   LABEL_TYPESCRIPT: 'TypeScript'
+
 jobs:
-  add-to-project:
-    name: Add issue with typescript label to project
+  track_issue:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@2e5cc851ca7162e9eb510e6da6a5c64022e606a7 #v1.0.0
-        with:
-          labeled: ${{ env.LABEL_TYPESCRIPT }}
-          project-url: ${{ env.TYPESCRIPT_PROJECT_URL }}
-          github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+    # If you are using a personal access token, replace `YOUR_TOKEN` with the name of the secret that contains your personal access token.
+    #
+    # Replace `YOUR_ORGANIZATION` with the name of your organization. For example, `octo-org`.
+    #
+    # Replace `YOUR_PROJECT_NUMBER` with your project number. To find the project number, look at the project URL. For example, `https://github.com/orgs/octo-org/projects/5` has a project number of 5.
+      - name: Get project data
+        env:
+          GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          ORGANIZATION: matthewgallo
+          PROJECT_NUMBER: 1
+        run: |
+        gh api graphql -f query='
+          query($org: String!, $number: Int!) {
+            organization(login: $org){
+              projectV2(number: $number) {
+                id
+                fields(first:20) {
+                  nodes {
+                    ... on ProjectV2Field {
+                      id
+                      name
+                    }
+                    ... on ProjectV2SingleSelectField {
+                      id
+                      name
+                      options {
+                        id
+                        name
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+
+  # add-to-project:
+  #   name: Add issue with typescript label to project
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/add-to-project@2e5cc851ca7162e9eb510e6da6a5c64022e606a7 #v1.0.0
+  #       with:
+  #         labeled: ${{ env.LABEL_TYPESCRIPT }}
+  #         project-url: ${{ env.TYPESCRIPT_PROJECT_URL }}
+  #         github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
