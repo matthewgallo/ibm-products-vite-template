@@ -9,6 +9,7 @@ env:
 
 jobs:
   track_issue:
+    if: ${{ github.event.label.name == 'TypeScript' }}
     runs-on: ubuntu-latest
     steps:
     # If you are using a personal access token, replace `YOUR_TOKEN` with the name of the secret that contains your personal access token.
@@ -22,7 +23,7 @@ jobs:
           ORGANIZATION: matthewgallo
           PROJECT_NUMBER: 1
         run: |
-        gh api graphql -f query='
+          gh api graphql -f query='
           query($org: String!, $number: Int!) {
             organization(login: $org){
               projectV2(number: $number) {
