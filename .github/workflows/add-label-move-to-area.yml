@@ -47,6 +47,29 @@ jobs:
             }
           }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
 
+          echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
+          echo 'AREA_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Area") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TYPESCRIPT_OPTION_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Area") | .options[] | select(.name=="TypeScript") |.id' project_data.json) >> $GITHUB_ENV
+
+
+
+      - name: Add PR to project
+        env:
+          GH_TOKEN: ${{ secrets.YOUR_TOKEN }}
+          PR_ID: ${{ github.event.pull_request.node_id }}
+        # Uses [GitHub CLI](https://cli.github.com/manual/) and the API to add the pull request that triggered this workflow to the project. The `jq` flag parses the response to get the ID of the created item.
+        run: |
+          item_id="$( gh api graphql -f query='
+            mutation($project:ID!, $pr:ID!) {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $pr}) {
+                item {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectV2ItemById.item.id')"
+
+            echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+
   # add-to-project:
   #   name: Add issue with typescript label to project
   #   runs-on: ubuntu-latest
