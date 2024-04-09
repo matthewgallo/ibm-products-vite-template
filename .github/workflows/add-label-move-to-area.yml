@@ -14,20 +14,15 @@ jobs:
     if: ${{ github.event.label.name == 'TypeScript' }}
     runs-on: ubuntu-latest
     steps:
-    # If you are using a personal access token, replace `YOUR_TOKEN` with the name of the secret that contains your personal access token.
-    #
-    # Replace `YOUR_ORGANIZATION` with the name of your organization. For example, `octo-org`.
-    #
-    # Replace `YOUR_PROJECT_NUMBER` with your project number. To find the project number, look at the project URL. For example, `https://github.com/orgs/octo-org/projects/5` has a project number of 5.
       - name: Get project data
         env:
           GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
-          ORGANIZATION: matthewgallo
+          USER: matthewgallo
           PROJECT_NUMBER: 1
         run: |
           gh api graphql -f query='
-          query($org: String!, $number: Int!) {
-            user(login: $org){
+          query($user: String!, $number: Int!) {
+            user(login: $user){
               projectV2(number: $number) {
                 id
                 fields(first:20) {
@@ -48,7 +43,7 @@ jobs:
                 }
               }
             }
-          }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+          }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
 
           echo 'PROJECT_ID='$(jq '.data.organization.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'AREA_FIELD_ID='$(jq '.data.organization.projectV2.fields.nodes[] | select(.name== "Area") | .id' project_data.json) >> $GITHUB_ENV
