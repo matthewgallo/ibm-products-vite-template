@@ -4,7 +4,7 @@ on:
     types: [ labeled ]
 
 env:
-  TYPESCRIPT_PROJECT_URL: https://github.com/orgs/carbon-design-system/projects/53
+  TYPESCRIPT_PROJECT_URL: https://github.com/users/matthewgallo/projects/1
   LABEL_TYPESCRIPT: 'TypeScript'
 jobs:
   add-to-project:
