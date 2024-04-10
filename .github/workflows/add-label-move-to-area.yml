@@ -15,6 +15,7 @@ jobs:
     env:
       LABEL: 'TypeScript'
       FIELD: 'Area'
+      FIELD_OPTION: '🟦 Typescript'
     steps:
       - name: Get project data
         env:
@@ -49,7 +50,7 @@ jobs:
 
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'AREA_FIELD_ID='$(jq --arg field_name $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field_name) | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg label_name $LABEL --arg field_name $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field_name) | .options[] | select(.name==$label_name) |.id' project_data.json) >> $GITHUB_ENV
+          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg field_option $FIELD_OPTION --arg field_name $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field_name) | .options[] | select(.name==$field_option) |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add issue to project
         env:
