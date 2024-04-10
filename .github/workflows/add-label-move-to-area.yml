@@ -15,7 +15,7 @@ jobs:
     env:
       LABEL: 'TypeScript'
       FIELD: 'Area'
-      FIELD_OPTION: '🟦 Typescript'
+      FIELD_OPTION: 'Typescript'
     steps:
       - name: Get project data
         env:
