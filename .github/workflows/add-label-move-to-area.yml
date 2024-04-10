@@ -13,13 +13,15 @@ jobs:
   move_ts_issue_to_area:
     if: ${{ github.event.label.name == 'TypeScript' }}
     runs-on: ubuntu-latest
+    env:
+      LABEL: 'TypeScript'
     steps:
       - name: Get project data
         env:
           GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
           USER: matthewgallo
           PROJECT_NUMBER: 1
-          LABEL: 'TypeScript'
+          # LABEL: 'TypeScript'
           FIELD: 'Area'
         run: |
           gh api graphql -f query='
@@ -49,7 +51,7 @@ jobs:
 
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'AREA_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .options[] | select(.name==$LABEL) |.id' project_data.json) >> $GITHUB_ENV
+          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg label_name $LABEL '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .options[] | select(.name==$label_name) |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add issue to project
         env:
