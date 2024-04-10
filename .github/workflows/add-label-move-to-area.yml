@@ -4,9 +4,9 @@ on:
     types: [ labeled ]
 
 env:
-  TYPESCRIPT_PROJECT_URL: https://github.com/users/matthewgallo/projects/1
+  # PROJECT_URL: https://github.com/users/matthewgallo/projects/1
   LABEL_TYPESCRIPT: 'TypeScript'
-  ORGANIZATION: matthewgallo
+  # ORGANIZATION: matthewgallo
   PROJECT_NUMBER: 1
 
 jobs:
@@ -47,9 +47,7 @@ jobs:
 
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'AREA_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .options[] | select(.name=="TypeScript") |.id' project_data.json) >> $GITHUB_ENV
-
-
+          echo 'TYPESCRIPT_OPTION_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .options[] | select(.name=="$LABEL_TYPESCRIPT") |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add issue to project
         env:
@@ -69,6 +67,7 @@ jobs:
             }' -f project=$PROJECT_ID -f issue=$ISSUE_ID --jq '.data.addProjectV2ItemById.item.id')"
 
             echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+
       - name: Set fields
         env:
           GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
