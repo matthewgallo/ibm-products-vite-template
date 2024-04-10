@@ -5,7 +5,6 @@ on:
 
 # env:
   # PROJECT_URL: https://github.com/orgs/carbon-design-system/projects/65
-  # LABEL_TYPESCRIPT: 'TypeScript'
   # ORGANIZATION: carbon-design-system
   # PROJECT_NUMBER: 65
 
@@ -15,14 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     env:
       LABEL: 'TypeScript'
+      FIELD: 'Area'
     steps:
       - name: Get project data
         env:
           GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
           USER: matthewgallo
           PROJECT_NUMBER: 1
-          # LABEL: 'TypeScript'
-          FIELD: 'Area'
         run: |
           gh api graphql -f query='
           query($user: String!, $number: Int!) {
@@ -50,8 +48,8 @@ jobs:
           }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
 
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'AREA_FIELD_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg label_name $LABEL '.data.user.projectV2.fields.nodes[] | select(.name== "Area") | .options[] | select(.name==$label_name) |.id' project_data.json) >> $GITHUB_ENV
+          echo 'AREA_FIELD_ID='$(jq --arg field_name $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field_name) | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg label_name $LABEL --arg field_name $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field_name) | .options[] | select(.name==$label_name) |.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add issue to project
         env:
