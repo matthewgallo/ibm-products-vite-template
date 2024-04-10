@@ -10,7 +10,7 @@ on:
   # PROJECT_NUMBER: 65
 
 jobs:
-  track_issue:
+  move_ts_issue_to_area:
     if: ${{ github.event.label.name == 'TypeScript' }}
     runs-on: ubuntu-latest
     steps:
