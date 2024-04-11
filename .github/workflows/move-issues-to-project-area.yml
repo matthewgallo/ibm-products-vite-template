@@ -1,4 +1,4 @@
-name: Moves a TypeScript labeled issue to a project area
+name: Moves labeled issues to a specific project area
 
 on:
   issues:
