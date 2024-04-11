@@ -10,6 +10,10 @@ on:
         default: ''
         type: string
         required: true
+      project_number:
+        default: ''
+        type: string
+        required: true
 
 # env:
   # PROJECT_URL: https://github.com/orgs/carbon-design-system/projects/65
@@ -24,7 +28,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
           USER: matthewgallo
-          PROJECT_NUMBER: 1
         run: |
           gh api graphql -f query='
           query($user: String!, $number: Int!) {
@@ -49,7 +52,7 @@ jobs:
                 }
               }
             }
-          }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
+          }' -f user=$USER -F number=${{ inputs.project_number }} > project_data.json
 
           echo 'Field and field option are: "${{ inputs.field }}: ${{ inputs.field_option }}"'
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
@@ -62,7 +65,6 @@ jobs:
           GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
           ISSUE_ID: ${{ github.event.issue.node_id }}
           USER: matthewgallo
-          PROJECT_NUMBER: 1
         # Uses [GitHub CLI](https://cli.github.com/manual/) and the API to add the pull request that triggered this workflow to the project. The `jq` flag parses the response to get the ID of the created item.
         run: |
           item_id="$( gh api graphql -f query='

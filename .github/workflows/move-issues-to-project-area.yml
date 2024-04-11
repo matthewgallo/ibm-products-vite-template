@@ -11,6 +11,7 @@ jobs:
     with:
       field: 'Area'
       field_option: '🟦 Typescript'
+      project_number: '1'
     secrets: inherit
   move-test-issues:
     if: ${{ github.event.label.name == 'Testing' }}
@@ -18,4 +19,5 @@ jobs:
     with:
       field: 'Area'
       field_option: '🚧 Testing'
+      project_number: '1'
     secrets: inherit
