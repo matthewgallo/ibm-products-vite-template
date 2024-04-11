@@ -49,8 +49,8 @@ jobs:
           }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
 
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'AREA_FIELD_ID='$(jq --arg field_name $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field_name) | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name=="Area") | .options[] | select(.name=="🟦 Typescript") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'AREA_FIELD_ID='$(jq --arg field $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .id' project_data.json) >> $GITHUB_ENV
+          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg field $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .options[] | select(.name=="🟦 Typescript") |.id' project_data.json) >> $GITHUB_ENV
             
 
       - name: Add issue to project
