@@ -13,9 +13,9 @@ jobs:
       field_option: '🟦 Typescript'
     secrets: inherit
   move-test-issues:
-      if: ${{ github.event.label.name == 'Testing' }}
-      uses: ./.github/workflows/add-label-move-to-area.yml
-      with:
-        field: 'Area'
-        field_option: '🚧 Testing'
-      secrets: inherit
+    if: ${{ github.event.label.name == 'Testing' }}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Area'
+      field_option: '🚧 Testing'
+    secrets: inherit
