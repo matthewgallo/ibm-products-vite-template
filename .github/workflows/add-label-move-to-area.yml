@@ -50,7 +50,7 @@ jobs:
 
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
           echo 'AREA_FIELD_ID='$(jq --arg field $FIELD '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg field $FIELD field_option $FIELD_OPTION '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .options[] | select(.name==$field_option) |.id' project_data.json) >> $GITHUB_ENV
+          echo 'TYPESCRIPT_OPTION_ID='$(jq --arg field $FIELD --arg field_option $FIELD_OPTION '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .options[] | select(.name==$field_option) |.id' project_data.json) >> $GITHUB_ENV
             
 
       - name: Add issue to project
