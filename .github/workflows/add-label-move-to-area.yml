@@ -1,7 +1,15 @@
 name: Add issue to project area given a specific label
 on:
-  issues:
-    types: [ labeled ]
+  workflow_call:
+    inputs:
+      field:
+        default: ''
+        type: string
+        required: true
+      field_option:
+        default: ''
+        type: string
+        required: true
 
 # env:
   # PROJECT_URL: https://github.com/orgs/carbon-design-system/projects/65
@@ -9,13 +17,8 @@ on:
   # PROJECT_NUMBER: 65
 
 jobs:
-  move_ts_issue_to_area:
-    if: ${{ github.event.label.name == 'TypeScript' }}
+  move_to_area_parent:
     runs-on: ubuntu-latest
-    env:
-      LABEL: "TypeScript"
-      FIELD: "Area"
-      FIELD_OPTION: "🟦 Typescript"
     steps:
       - name: Get project data
         env:
@@ -48,10 +51,10 @@ jobs:
             }
           }' -f user=$USER -F number=$PROJECT_NUMBER > project_data.json
 
-          echo 'Field option is: "${{env.FIELD}}: ${{env.FIELD_OPTION}}"'
+          echo 'Field option is: "${{ inputs.field }}: ${{ inputs.field_option }}"'
           echo 'PROJECT_ID='$(jq '.data.user.projectV2.id' project_data.json) >> $GITHUB_ENV
-          echo 'AREA_FIELD_ID='$(jq --arg field ${{env.FIELD}} '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .id' project_data.json) >> $GITHUB_ENV
-          echo 'TYPESCRIPT_OPTION_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name=="${{env.FIELD}}") | .options[] | select(.name=="${{env.FIELD_OPTION}}") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'AREA_FIELD_ID='$(jq --arg field ${{ inputs.field }} '.data.user.projectV2.fields.nodes[] | select(.name==$field) | .id' project_data.json) >> $GITHUB_ENV
+          echo 'FIELD_OPTION_ID='$(jq '.data.user.projectV2.fields.nodes[] | select(.name=="${{ inputs.field }}") | .options[] | select(.name=="${{ inputs.field_option }}") |.id' project_data.json) >> $GITHUB_ENV
             
 
       - name: Add issue to project
@@ -97,4 +100,4 @@ jobs:
                   id
                   }
               }
-            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f area_field=$AREA_FIELD_ID -f area_value=${{ env.TYPESCRIPT_OPTION_ID }} --silent
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f area_field=$AREA_FIELD_ID -f area_value=${{ env.FIELD_OPTION_ID }} --silent

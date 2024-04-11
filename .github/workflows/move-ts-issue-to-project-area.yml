@@ -1,0 +1,14 @@
+name: Moves a TypeScript labeled issue to a project area
+
+on:
+  issues:
+    types: [ labeled ]
+
+jobs:
+  move-to-area:
+    if: ${{ github.event.label.name == 'TypeScript' }}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Area'
+      field_option: '🟦 Typescript'
+    secrets: inherit
