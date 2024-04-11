@@ -5,10 +5,17 @@ on:
     types: [ labeled ]
 
 jobs:
-  move-to-area:
+  move-ts-issues:
     if: ${{ github.event.label.name == 'TypeScript' }}
     uses: ./.github/workflows/add-label-move-to-area.yml
     with:
       field: 'Area'
       field_option: '🟦 Typescript'
     secrets: inherit
+  move-test-issues:
+      if: ${{ github.event.label.name == 'Testing' }}
+      uses: ./.github/workflows/add-label-move-to-area.yml
+      with:
+        field: 'Area'
+        field_option: '🚧 Testing'
+      secrets: inherit
