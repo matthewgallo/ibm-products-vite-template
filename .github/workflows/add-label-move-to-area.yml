@@ -14,11 +14,9 @@ on:
         default: ''
         type: string
         required: true
-
-# env:
-  # PROJECT_URL: https://github.com/orgs/carbon-design-system/projects/65
-  # ORGANIZATION: carbon-design-system
-  # PROJECT_NUMBER: 65
+    secrets:
+      token:
+        required: true
 
 jobs:
   move_to_project_field:
@@ -26,7 +24,7 @@ jobs:
     steps:
       - name: Get project data
         env:
-          GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GH_TOKEN: ${{ secrets.token }}
           USER: matthewgallo
         run: |
           gh api graphql -f query='
@@ -62,7 +60,7 @@ jobs:
 
       - name: Add issue to project
         env:
-          GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GH_TOKEN: ${{ secrets.token }}
           ISSUE_ID: ${{ github.event.issue.node_id }}
           USER: matthewgallo
         # Uses [GitHub CLI](https://cli.github.com/manual/) and the API to add the pull request that triggered this workflow to the project. The `jq` flag parses the response to get the ID of the created item.
@@ -80,7 +78,7 @@ jobs:
 
       - name: Set fields
         env:
-          GH_TOKEN: ${{ secrets.ADD_TO_PROJECT_PAT }}
+          GH_TOKEN: ${{ secrets.token }}
         # Sets the value of the `field` to the specified `field_option`.
         run: |
           gh api graphql -f query='

@@ -12,7 +12,8 @@ jobs:
       field: 'Area'
       field_option: '🟦 Typescript'
       project_number: '1'
-    secrets: inherit
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
   move-test-issues:
     if: ${{ github.event.label.name == 'Testing' }}
     uses: ./.github/workflows/add-label-move-to-area.yml
@@ -20,4 +21,5 @@ jobs:
       field: 'Area'
       field_option: '🚧 Testing'
       project_number: '1'
-    secrets: inherit
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
