@@ -23,3 +23,12 @@ jobs:
       project_number: '1'
     secrets:
       token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+  empty-area-test:
+    if: ${{ github.event.label.name == 'Empty' }}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Area'
+      field_option: ''
+      project_number: '1'
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
