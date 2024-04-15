@@ -32,3 +32,12 @@ jobs:
       project_number: '1'
     secrets:
       token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+  move-status-issue:
+    if: ${{ github.event.label.name == 'Todo' }}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Status'
+      field_option: 'Todo'
+      project_number: '1'
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
