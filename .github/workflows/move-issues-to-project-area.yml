@@ -41,3 +41,30 @@ jobs:
       project_number: '1'
     secrets:
       token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+  move-dev-issue:
+    if: ${{contains(github.event.label.name, format('role{0} dev', ':'))}}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Role'
+      field_option: 'Dev'
+      project_number: '1'
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+  move-design-issue:
+    if: ${{contains(github.event.label.name, format('role{0} design', ':'))}}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Role'
+      field_option: 'Design'
+      project_number: '1'
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
+  move-cross-discipline-issue:
+    if: ${{contains(github.event.label.name, format('role{0} design', ':'))}} && ${{contains(github.event.label.name, format('role{0} dev', ':'))}}
+    uses: ./.github/workflows/add-label-move-to-area.yml
+    with:
+      field: 'Role'
+      field_option: 'Cross discipline'
+      project_number: '1'
+    secrets:
+      token: ${{ secrets.ADD_TO_PROJECT_PAT }}
