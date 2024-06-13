@@ -60,7 +60,7 @@ jobs:
     secrets:
       token: ${{ secrets.ADD_TO_PROJECT_PAT }}
   move-cross-discipline-issue:
-    if: ${{contains(github.event.label.name, format('role{0} design', ':'))}} && ${{contains(github.event.label.name, format('role{0} dev', ':'))}}
+    if: ${{contains(github.event.label.name, format('role{0} design', ':')) && contains(github.event.label.name, format('role{0} dev', ':'))}}
     uses: ./.github/workflows/add-label-move-to-area.yml
     with:
       field: 'Role'
