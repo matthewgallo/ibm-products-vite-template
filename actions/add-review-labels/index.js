@@ -19,6 +19,7 @@ async function run() {
   console.log(octokit);
   console.log(context.payload);
   const { pull_request: pullRequest, repository, review } = context.payload;
+  console.log(object);
   const { state, draft } = pullRequest;
 
   // We only want to work with Pull Requests that are marked as open
@@ -28,6 +29,32 @@ async function run() {
 
   // We only want to work with Pull Requests that are not draft PRs
   if (draft) {
+    return;
+  }
+
+  // If the review was not an approval then we'll ignore the event
+  if (review.state !== 'approved') {
+    return;
+  }
+
+  const { data: allReviews } = await octokit.rest.pulls.listReviews({
+    owner: repository.owner.login,
+    repo: repository.name,
+    pull_number: pullRequest.number,
+    per_page: 100,
+  });
+
+  const additionalReviewLabel = 'status: one more review 👀';
+  const readyForReviewLabel = 'status: ready for review 👀';
+
+  if (!allReviews.length) {
+    // Add ready for review label when PR is opened
+    await octokit.rest.issues.addLabel({
+      owner: repository.owner.login,
+      repo: repository.name,
+      issue_number: pullRequest.number,
+      name: readyForReviewLabel,
+    });
     return;
   }
 
@@ -44,18 +71,6 @@ async function run() {
   if (!acceptedPermissionLevels.has(permissionLevel.permission)) {
     return;
   }
-
-  // If the review was not an approval then we'll ignore the event
-  if (review.state !== 'approved') {
-    return;
-  }
-
-  const { data: allReviews } = await octokit.rest.pulls.listReviews({
-    owner: repository.owner.login,
-    repo: repository.name,
-    pull_number: pullRequest.number,
-    per_page: 100,
-  });
 
   // The `listReviews` endpoint will return all of the reviews for the pull
   // request. We only care about the most recent reviews so we'll go through the
@@ -84,9 +99,6 @@ async function run() {
   const approved = reviews.filter((review) => {
     return review.state === 'APPROVED';
   });
-
-  const additionalReviewLabel = 'status: one more review 👀';
-  const readyForReviewLabel = 'status: ready for review 👀';
 
   if (approved.length > 0) {
     const hasReadyLabel = pullRequest.labels.find((label) => {
