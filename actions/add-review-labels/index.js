@@ -16,8 +16,6 @@ async function run() {
     required: true,
   });
   const octokit = new github.getOctokit(token);
-  console.log(octokit);
-  console.log(context.payload);
   const { pull_request: pullRequest, repository, review, action } = context.payload;
   const { state, draft } = pullRequest;
 
@@ -45,9 +43,8 @@ async function run() {
 
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
-  console.log('do we get here?', action);
+
   if (action === 'reopened' || action === 'opened') {
-    console.log('only on open or reopen?');
     // Add ready for review label when PR is opened
     await octokit.rest.issues.addLabels({
       owner: repository.owner.login,
