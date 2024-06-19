@@ -44,6 +44,14 @@ async function run() {
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
+  const { data } = await octokit.rest.teams.getByName({
+    org: repository.organization.id,
+    team_slug: 'carbon-for-ibm-products-reviewers',
+  });
+  const { members_url } = data;
+
+  console.log(members_url);
+
   if (action === 'reopened' || action === 'opened') {
     // Add ready for review label when PR is opened
     await octokit.rest.issues.addLabels({
