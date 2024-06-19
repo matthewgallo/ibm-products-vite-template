@@ -18,8 +18,8 @@ async function run() {
   const octokit = new github.getOctokit(token);
   console.log(octokit);
   console.log(context.payload);
-  const { pull_request: pullRequest, repository, review } = context.payload;
-  const { state, draft, action } = pullRequest;
+  const { pull_request: pullRequest, repository, review, action } = context.payload;
+  const { state, draft } = pullRequest;
 
   // We only want to work with Pull Requests that are marked as open
   if (state !== 'open') {
