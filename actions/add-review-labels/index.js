@@ -19,7 +19,7 @@ async function run() {
   console.log(octokit);
   console.log(context.payload);
   const { pull_request: pullRequest, repository, review } = context.payload;
-  const { state, draft } = pullRequest;
+  const { state, draft, action } = pullRequest;
 
   // We only want to work with Pull Requests that are marked as open
   if (state !== 'open') {
@@ -46,7 +46,7 @@ async function run() {
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
-  if (!allReviews.length) {
+  if (action === 'reopened' || action === 'opened') {
     // Add ready for review label when PR is opened
     await octokit.rest.issues.addLabel({
       owner: repository.owner.login,
