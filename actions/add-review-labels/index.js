@@ -19,7 +19,6 @@ async function run() {
   console.log(octokit);
   console.log(context.payload);
   const { pull_request: pullRequest, repository, review } = context.payload;
-  console.log(object);
   const { state, draft } = pullRequest;
 
   // We only want to work with Pull Requests that are marked as open
