@@ -45,7 +45,7 @@ async function run() {
 
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
-  console.log('do we get here?');
+  console.log('do we get here?', action);
   if (action === 'reopened' || action === 'opened') {
     console.log('only on open or reopen?');
     // Add ready for review label when PR is opened
