@@ -1,5 +1,5 @@
 name: Add Review Labels
-on: pull_request_review
+on: [pull_request_review, pull_request]
 jobs:
   reviewer:
     runs-on: ubuntu-latest
@@ -8,4 +8,3 @@ jobs:
       - uses: ./actions/add-review-labels
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          AUTO_LABEL_USERS: 'matthewgallo'
