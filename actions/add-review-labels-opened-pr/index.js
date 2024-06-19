@@ -44,7 +44,7 @@ async function run() {
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
-  console.log(repository);
+  console.log(pullRequest, repository);
 
   const { data } = await octokit.rest.teams.getByName({
     org: 'carbon-design-system', // 'repository.owner.id', hard coding this value while testing in separate repo
@@ -52,7 +52,16 @@ async function run() {
   });
   const { members_url } = data;
 
-  console.log(members_url);
+  const retrieveTeamMembers = async () => {
+    const fixedMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
+    const response = await fetch(fixedMembersUrl);
+ 
+    const members = await response.json();
+    return members;
+  }
+
+  const teamMembers = await retrieveTeamMembers();
+  console.log(teamMembers);
 
   if (action === 'reopened' || action === 'opened') {
     // Add ready for review label when PR is opened
