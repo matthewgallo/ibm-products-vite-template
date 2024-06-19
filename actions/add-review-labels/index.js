@@ -32,7 +32,7 @@ async function run() {
   }
 
   // If the review was not an approval then we'll ignore the event
-  if (review.state !== 'approved') {
+  if (review?.state !== 'approved') {
     return;
   }
 
