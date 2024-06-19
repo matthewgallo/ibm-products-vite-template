@@ -47,7 +47,7 @@ async function run() {
   console.log(repository);
 
   const { data } = await octokit.rest.teams.getByName({
-    org: repository.owner.id,
+    org: 'carbon-design-system', // 'repository.owner.id', hard coding this value while testing in separate repo
     team_slug: 'carbon-for-ibm-products-reviewers',
   });
   const { members_url } = data;
