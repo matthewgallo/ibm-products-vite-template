@@ -16,6 +16,8 @@ async function run() {
     required: true,
   });
   const octokit = new github.getOctokit(token);
+  console.log(octokit);
+  console.log(context.payload);
   const { pull_request: pullRequest, repository, review } = context.payload;
   const { state, draft } = pullRequest;
 
