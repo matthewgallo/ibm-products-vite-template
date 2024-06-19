@@ -41,6 +41,30 @@ async function run() {
     per_page: 100,
   });
 
+  const { data } = await octokit.rest.teams.getByName({
+    org: 'carbon-design-system', // 'repository.owner.id', hard coding this value while testing in separate repo
+    team_slug: 'carbon-for-ibm-products-reviewers',
+  });
+  const { members_url } = data;
+
+  const retrieveTeamMembers = async () => {
+    const teamMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
+    const response = await fetch(teamMembersUrl, {
+      method: "GET",
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+      }
+    });
+ 
+    const members = await response.json();
+    return members;
+  }
+
+  const teamMembers = await retrieveTeamMembers();
+  console.log(teamMembers);
+
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
@@ -81,6 +105,12 @@ async function run() {
     reviewers[user.login] = true;
     reviews.push(review);
   }
+
+  console.log('////////////////////////////////////////////');
+  console.log(reviewers);
+  console.log('////////////////////////////////////////////');
+  console.log(reviews);
+  console.log('////////////////////////////////////////////');
 
   const approved = reviews.filter((review) => {
     return review.state === 'APPROVED';
