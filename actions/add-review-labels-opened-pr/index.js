@@ -54,7 +54,14 @@ async function run() {
 
   const retrieveTeamMembers = async () => {
     const fixedMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
-    const response = await fetch(fixedMembersUrl);
+    const response = await fetch(fixedMembersUrl, {
+      method: "GET",
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+      }
+    });
  
     const members = await response.json();
     return members;
