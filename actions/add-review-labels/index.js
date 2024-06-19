@@ -32,7 +32,7 @@ async function run() {
   }
 
   const { data: permissionLevel } =
-    await octokit.repos.getCollaboratorPermissionLevel({
+    await octokit.rest.repos.getCollaboratorPermissionLevel({
       owner: repository.owner.login,
       repo: repository.name,
       username: review.user.login,
@@ -50,7 +50,7 @@ async function run() {
     return;
   }
 
-  const { data: allReviews } = await octokit.pulls.listReviews({
+  const { data: allReviews } = await octokit.rest.pulls.listReviews({
     owner: repository.owner.login,
     repo: repository.name,
     pull_number: pullRequest.number,
