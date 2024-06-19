@@ -32,7 +32,7 @@ async function run() {
   }
 
   // If the review was not an approval then we'll ignore the event
-  if (review?.state !== 'approved') {
+  if (review && review.state !== 'approved') {
     return;
   }
 
@@ -45,7 +45,7 @@ async function run() {
 
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
-
+  console.log('do we get here?');
   if (action === 'reopened' || action === 'opened') {
     console.log('only on open or reopen?');
     // Add ready for review label when PR is opened
