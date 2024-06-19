@@ -12,7 +12,7 @@ const core = require('@actions/core');
 
 async function run() {
   const { context } = github;
-  const token = core.getInput('ADD_TO_PROJECT_PAT', {
+  const token = core.getInput('REVIEW_LABEL', {
     required: true,
   });
   const octokit = new github.getOctokit(token);
