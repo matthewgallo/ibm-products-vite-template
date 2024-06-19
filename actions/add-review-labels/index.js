@@ -49,7 +49,7 @@ async function run() {
   if (action === 'reopened' || action === 'opened') {
     console.log('only on open or reopen?');
     // Add ready for review label when PR is opened
-    await octokit.rest.issues.addLabel({
+    await octokit.rest.issues.addLabels({
       owner: repository.owner.login,
       repo: repository.name,
       issue_number: pullRequest.number,
