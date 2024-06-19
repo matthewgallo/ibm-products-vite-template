@@ -47,6 +47,7 @@ async function run() {
   const readyForReviewLabel = 'status: ready for review 👀';
 
   if (action === 'reopened' || action === 'opened') {
+    console.log('only on open or reopen?');
     // Add ready for review label when PR is opened
     await octokit.rest.issues.addLabel({
       owner: repository.owner.login,
