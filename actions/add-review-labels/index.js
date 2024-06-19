@@ -50,7 +50,7 @@ async function run() {
   });
   const { members_url } = data;
 
-  console.log(members_url);
+  console.log(repository, members_url);
 
   if (action === 'reopened' || action === 'opened') {
     // Add ready for review label when PR is opened
