@@ -44,6 +44,27 @@ async function run() {
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
+  console.log(repository);
+
+  const { data } = await octokit.rest.teams.getByName({
+    org: 'carbon-design-system', // 'repository.owner.id', hard coding this value while testing in separate repo
+    team_slug: 'carbon-for-ibm-products-reviewers',
+  });
+  const { members_url } = data;
+
+  console.log(members_url);
+
+  if (action === 'reopened' || action === 'opened') {
+    // Add ready for review label when PR is opened
+    await octokit.rest.issues.addLabels({
+      owner: repository.owner.login,
+      repo: repository.name,
+      issue_number: pullRequest.number,
+      labels: [readyForReviewLabel],
+    });
+    return;
+  }
+
   const { data: permissionLevel } =
     await octokit.rest.repos.getCollaboratorPermissionLevel({
       owner: repository.owner.login,
