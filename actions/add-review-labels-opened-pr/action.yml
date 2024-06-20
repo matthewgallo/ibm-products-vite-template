@@ -1,7 +1,7 @@
 name: Add review labels
 description: A custom action that adds review labels to a Pull Request
 inputs:
-  REVIEW_LABEL:
+  GITHUB_TOKEN:
     description: A GitHub token to execute GitHub tasks
     required: true
   AUTO_LABEL_USERS:

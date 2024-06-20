@@ -12,7 +12,7 @@ import core from '@actions/core';
 
 async function run() {
   const { context } = github;
-  const token = core.getInput('REVIEW_LABEL', {
+  const token = core.getInput('GITHUB_TOKEN', {
     required: true,
   });
   const octokit = new github.getOctokit(token);

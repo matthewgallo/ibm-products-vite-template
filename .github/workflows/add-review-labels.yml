@@ -8,7 +8,7 @@ jobs:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - uses: ./actions/add-review-labels
         with:
-          REVIEW_LABEL: ${{ secrets.REVIEW_LABEL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   pr_opened:
     runs-on: ubuntu-latest
     if: ${{contains(github.event_name, 'pull_request_target')}}
@@ -16,4 +16,4 @@ jobs:
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - uses: ./actions/add-review-labels-opened-pr
         with:
-          REVIEW_LABEL: ${{ secrets.REVIEW_LABEL }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
