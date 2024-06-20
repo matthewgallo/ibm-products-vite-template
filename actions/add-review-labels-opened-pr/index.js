@@ -46,6 +46,13 @@ async function run() {
 
   console.log(pullRequest, repository);
 
+  const { data: repoTeams } = octokit.rest.repos.listTeams({
+    owner: repository.owner,
+    repo: repository.name,
+  });
+
+  console.log('repoTeams', repoTeams);
+
   const { data } = await octokit.rest.teams.getByName({
     org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
     team_slug: 'reviewing-team',
