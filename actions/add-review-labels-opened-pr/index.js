@@ -34,19 +34,11 @@ async function run() {
     return;
   }
 
-  const { data: allReviews } = await octokit.rest.pulls.listReviews({
-    owner: repository.owner.login,
-    repo: repository.name,
-    pull_number: pullRequest.number,
-    per_page: 100,
-  });
-
-  const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
   console.log(pullRequest, repository);
 
-  const { data: repoTeams } = octokit.rest.repos.listTeams({
+  const { data: repoTeams } = await octokit.rest.repos.listTeams({
     owner: repository.owner,
     repo: repository.name,
   });
