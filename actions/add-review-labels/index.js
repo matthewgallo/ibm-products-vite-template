@@ -42,9 +42,11 @@ async function run() {
   });
 
   // Get reviewer team data
+  // This won't work currently because it requires using a token separate from GITHUB_TOKEN
+  // which won't work across forks!
   const { data } = await octokit.rest.teams.getByName({
-    org: 'carbon-design-system', // 'repository.owner.id', hard coding this value while testing in separate repo
-    team_slug: 'carbon-for-ibm-products-reviewers',
+    org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
+    team_slug: 'reviewing-team',
   });
   const { members_url } = data;
 
