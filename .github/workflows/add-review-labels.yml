@@ -9,7 +9,7 @@ jobs:
       - uses: ./actions/add-review-labels
         with:
           REVIEW_LABEL: ${{ secrets.REVIEW_LABEL }}
-  pr_review_opened:
+  pr_opened:
     runs-on: ubuntu-latest
     if: ${{contains(github.event_name, 'pull_request')}}
     steps:
