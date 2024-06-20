@@ -7,8 +7,8 @@
 
 'use strict';
 
-const github = require('@actions/github');
-const core = require('@actions/core');
+import github from '@actions/github';
+import core from '@actions/core';
 
 async function run() {
   const { context } = github;

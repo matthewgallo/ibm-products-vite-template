@@ -7,8 +7,8 @@
 
 'use strict';
 
-const github = require('@actions/github');
-const core = require('@actions/core');
+import github from '@actions/github';
+import core from '@actions/core';
 
 async function run() {
   const { context } = github;
@@ -41,12 +41,14 @@ async function run() {
     per_page: 100,
   });
 
+  // Get reviewer team data
   const { data } = await octokit.rest.teams.getByName({
     org: 'carbon-design-system', // 'repository.owner.id', hard coding this value while testing in separate repo
     team_slug: 'carbon-for-ibm-products-reviewers',
   });
   const { members_url } = data;
 
+  // Get reviewer team members
   const retrieveTeamMembers = async () => {
     const teamMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
     const response = await fetch(teamMembersUrl, {
@@ -68,17 +70,10 @@ async function run() {
   const additionalReviewLabel = 'status: one more review 👀';
   const readyForReviewLabel = 'status: ready for review 👀';
 
-  const { data: permissionLevel } =
-    await octokit.rest.repos.getCollaboratorPermissionLevel({
-      owner: repository.owner.login,
-      repo: repository.name,
-      username: review.user.login,
-    });
-
-  // If the reviewer doesn't have one of the following permission levels
-  // then ignore the event
-  const acceptedPermissionLevels = new Set(['admin', 'write']);
-  if (!acceptedPermissionLevels.has(permissionLevel.permission)) {
+  // If we find that the reviewing user is not part of the reviewing team
+  // then we don't want to count their review so we stop here
+  const reviewingUser = review.user.login;
+  if (!teamMembers.filter(user => user.login === reviewingUser).length) {
     return;
   }
 
@@ -90,15 +85,15 @@ async function run() {
 
   // Process reviews in reverse order since they are listed from oldest to newest
   for (const review of allReviews.reverse()) {
-    const { author_association: association, user } = review;
+    const { user } = review;
     // If we've already saved a review for this user we already have the most
     // recent review
     if (reviewers[user.login]) {
       continue;
     }
 
-    // If the author of the review is not a collaborator we ignore it
-    if (association !== 'COLLABORATOR') {
+    // If the author of the review not part of the reviewer team we ignore it
+    if (!teamMembers.filter(u => u.login === user.login).length) {
       continue;
     }
 
