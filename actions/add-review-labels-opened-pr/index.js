@@ -8,7 +8,7 @@
 'use strict';
 
 import github from '@actions/github';
-// import core from '@actions/core';
+import core from '@actions/core';
 import { App } from "octokit";
 
 async function run() {
