@@ -38,36 +38,36 @@ async function run() {
 
   console.log(pullRequest, repository);
 
-  // const { data: repoTeams } = await octokit.rest.repos.listTeams({
-  //   owner: repository.owner,
-  //   repo: repository.name,
-  // });
+  const { data: repoTeams } = await octokit.rest.repos.listTeams({
+    owner: repository.owner,
+    repo: repository.name,
+  });
 
-  // console.log('repoTeams', repoTeams);
+  console.log('repoTeams', repoTeams);
 
-  // const { data } = await octokit.rest.teams.getByName({
-  //   org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
-  //   team_slug: 'reviewing-team',
-  // });
-  // const { members_url } = data;
+  const { data } = await octokit.rest.teams.getByName({
+    org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
+    team_slug: 'reviewing-team',
+  });
+  const { members_url } = data;
 
-  // const retrieveTeamMembers = async () => {
-  //   const fixedMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
-  //   const response = await fetch(fixedMembersUrl, {
-  //     method: "GET",
-  //     headers: {
-  //       Accept: 'application/vnd.github+json',
-  //       Authorization: `Bearer ${token}`,
-  //       'X-GitHub-Api-Version': '2022-11-28',
-  //     }
-  //   });
+  const retrieveTeamMembers = async () => {
+    const fixedMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
+    const response = await fetch(fixedMembersUrl, {
+      method: "GET",
+      headers: {
+        Accept: 'application/vnd.github+json',
+        Authorization: `Bearer ${token}`,
+        'X-GitHub-Api-Version': '2022-11-28',
+      }
+    });
  
-  //   const members = await response.json();
-  //   return members;
-  // }
+    const members = await response.json();
+    return members;
+  }
 
-  // const teamMembers = await retrieveTeamMembers();
-  // console.log(teamMembers);
+  const teamMembers = await retrieveTeamMembers();
+  console.log(teamMembers);
 
   if (action === 'reopened' || action === 'opened') {
     // Add ready for review label when PR is opened
