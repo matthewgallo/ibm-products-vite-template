@@ -8,14 +8,23 @@
 'use strict';
 
 import github from '@actions/github';
-import core from '@actions/core';
+// import core from '@actions/core';
+import { App } from "octokit";
 
 async function run() {
   const { context } = github;
-  const token = core.getInput('GITHUB_TOKEN', {
+  const appId = core.getInput('APP_ID', {
     required: true,
   });
-  const octokit = new github.getOctokit(token);
+  const privateKey = core.getInput('APP_PRIVATE_KEY', {
+    required: true,
+  });
+  // const octokit = new github.getOctokit(token);
+  const app = new App({
+    appId,
+    privateKey,
+  });
+  const octokit = await app.getInstallationOctokit(52201197);
   const { pull_request: pullRequest, repository, review, action } = context.payload;
   const { state, draft } = pullRequest;
 
