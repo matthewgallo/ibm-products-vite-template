@@ -31,3 +31,5 @@ jobs:
       - uses: ./actions/add-review-labels-opened-pr
         with:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+          APP_ID: ${{ secrets.APP_ID }}
+          APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
