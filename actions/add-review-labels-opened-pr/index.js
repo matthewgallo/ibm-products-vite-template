@@ -59,6 +59,7 @@ async function run() {
   // console.log('repoTeams', repoTeams);
 
   // `GET /orgs/{org}/teams/{team_slug}`
+  // `GET /organizations/{org_id}/team/{team_id}`
   const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}', {
     org: 'mattgallo-org',
     team_slug: 'reviewing-team',
