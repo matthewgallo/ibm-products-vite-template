@@ -10,6 +10,8 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
+import { Octokit } from "@octokit/rest";
+import { createAppAuth } from "@octokit/auth-app";
 
 async function run() {
   const { context } = github;
@@ -19,12 +21,38 @@ async function run() {
   const privateKey = core.getInput('APP_PRIVATE_KEY', {
     required: true,
   });
-  // const octokit = new github.getOctokit(token);
-  const app = new App({
-    appId,
-    privateKey,
+  const clientId = core.getInput('APP_CLIENT_ID', {
+    required: true,
   });
+  const clientSecret = core.getInput('APP_CLIENT_SECRET', {
+    required: true,
+  });
+  // const octokit = new github.getOctokit(token);
+  // const app = new App({
+  //   appId,
+  //   privateKey,
+  // });
+  // Installation ID for github app: 52201197
+  // const octokit = await app.getInstallationOctokit(52201197);
+  const app = new App({ appId, privateKey, });
   const octokit = await app.getInstallationOctokit(52201197);
+  const resp = await octokit.request("GET /repos/{owner}/{repo}/branches", {
+    owner: 'matthewgallo',
+    repo: 'ibm-products-vite-template'
+  });
+  console.log(resp)
+
+// const octokit = new Octokit({
+//   authStrategy: createAppAuth,
+//   auth: {
+//     appId,
+//     privateKey,
+//     // optional: this will make appOctokit authenticate as app (JWT)
+//     //           or installation (access token), depending on the request URL
+//     installationId: 52201197,
+//   },
+// });
+
   const { pull_request: pullRequest, repository, review, action } = context.payload;
   const { state, draft } = pullRequest;
 
