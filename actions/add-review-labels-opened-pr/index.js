@@ -58,6 +58,7 @@ async function run() {
     org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
     team_slug: 'reviewing-team',
   });
+  console.log(data);
   const { members_url } = data;
 
   const retrieveTeamMembers = async () => {
