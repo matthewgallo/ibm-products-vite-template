@@ -70,24 +70,18 @@ async function run() {
   const { members_url } = data;
   console.log(data, members_url);
 
-  const retrieveTeamMembers = async () => {
-    const org_id = members_url.split('organizations/').pop().split('/team')[0];
-    const team_id = members_url.split('team/').pop().split('/members')[0];
-    console.log({org_id, team_id});
-    const response = await octokit.request('GET /organizations/{org_id}/team/{team_id}/members', {
-      org_id,
-      team_id,
-      headers: {
-        Accept: 'application/vnd.github+json',
-        'X-GitHub-Api-Version': '2022-11-28',
-      }
-    });
- 
-    const members = await response.json();
-    return members;
-  }
+  const org_id = members_url.split('organizations/').pop().split('/team')[0];
+  const team_id = members_url.split('team/').pop().split('/members')[0];
+  console.log({org_id, team_id});
+  const {data: teamMembers} = await octokit.request('GET /organizations/{org_id}/team/{team_id}/members', {
+    org_id,
+    team_id,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    }
+  });
 
-  const teamMembers = await retrieveTeamMembers();
   console.log(teamMembers);
 
   if (action === 'reopened' || action === 'opened') {
