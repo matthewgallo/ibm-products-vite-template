@@ -21,6 +21,8 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/github": "^6.0.0",
+    "@octokit/auth-app": "^7.1.0",
+    "@octokit/rest": "^21.0.0",
     "octokit": "^4.0.2"
   }
 }

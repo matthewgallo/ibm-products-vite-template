@@ -10,6 +10,12 @@ inputs:
   APP_PRIVATE_KEY:
     description: GitHub app private key
     required: true
+  APP_CLIENT_ID:
+    description: GitHub app client id
+    required: true
+  APP_CLIENT_SECRET:
+    description: GitHub app client secret
+    required: true
 runs:
   using: 'docker'
   image: 'Dockerfile'

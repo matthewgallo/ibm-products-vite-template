@@ -46,7 +46,7 @@
     "@octokit/types" "^13.0.0"
     "@octokit/webhooks" "^13.0.0"
 
-"@octokit/auth-app@^7.0.0":
+"@octokit/auth-app@^7.0.0", "@octokit/auth-app@^7.1.0":
   version "7.1.0"
   resolved "https://registry.yarnpkg.com/@octokit/auth-app/-/auth-app-7.1.0.tgz#55a3d3b3b3607b9d375abbe946163dca3a25c2c9"
   integrity sha512-cazGaJPSgeZ8NkVYeM/C5l/6IQ5vZnsI8p1aMucadCkt/bndI+q+VqwrlnWbASRmenjOkf1t1RpCKrif53U8gw==
@@ -233,6 +233,11 @@
   dependencies:
     "@octokit/types" "^12.6.0"
 
+"@octokit/plugin-request-log@^5.1.0":
+  version "5.3.0"
+  resolved "https://registry.yarnpkg.com/@octokit/plugin-request-log/-/plugin-request-log-5.3.0.tgz#4dea4f34316b7075d02796edcb73103266119e61"
+  integrity sha512-FiGcyjdtYPlr03ExBk/0ysIlEFIFGJQAVoPPMxL19B24bVSEiZQnVGBunNtaAF1YnvE/EFoDpXmITtRnyCiypQ==
+
 "@octokit/plugin-rest-endpoint-methods@^10.0.0":
   version "10.4.1"
   resolved "https://registry.yarnpkg.com/@octokit/plugin-rest-endpoint-methods/-/plugin-rest-endpoint-methods-10.4.1.tgz#41ba478a558b9f554793075b2e20cd2ef973be17"
@@ -299,6 +304,16 @@
     "@octokit/request-error" "^6.0.1"
     "@octokit/types" "^13.1.0"
     universal-user-agent "^7.0.2"
+
+"@octokit/rest@^21.0.0":
+  version "21.0.0"
+  resolved "https://registry.yarnpkg.com/@octokit/rest/-/rest-21.0.0.tgz#bde4b657193643b6b691810fe890755a3c67dd9f"
+  integrity sha512-XudXXOmiIjivdjNZ+fN71NLrnDM00sxSZlhqmPR3v0dVoJwyP628tSlc12xqn8nX3N0965583RBw5GPo6r8u4Q==
+  dependencies:
+    "@octokit/core" "^6.1.2"
+    "@octokit/plugin-paginate-rest" "^11.0.0"
+    "@octokit/plugin-request-log" "^5.1.0"
+    "@octokit/plugin-rest-endpoint-methods" "^13.0.0"
 
 "@octokit/types@^12.6.0":
   version "12.6.0"
