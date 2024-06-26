@@ -71,12 +71,14 @@ async function run() {
   console.log(data, members_url);
 
   const retrieveTeamMembers = async () => {
-    const fixedMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
-    const response = await fetch(fixedMembersUrl, {
-      method: "GET",
+    const org_id = members_url.split('organizations/').pop().split('/team')[0];
+    const team_id = members_url.split('team/').pop().split('/members')[0];
+    console.log({org_id, team_id});
+    const response = await octokit.request('GET /organizations/{org_id}/team/{team_id}/members', {
+      org_id,
+      team_id,
       headers: {
         Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${token}`,
         'X-GitHub-Api-Version': '2022-11-28',
       }
     });
