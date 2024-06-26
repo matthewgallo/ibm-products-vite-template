@@ -22,7 +22,7 @@ async function run() {
     required: true,
   });
   const app = new App({ appId, privateKey, });
-  const octokit = await app.getInstallationOctokit(52201197);
+  const octokit = await app.getInstallationOctokit(52238220);
   const resp = await octokit.request("GET /repos/{owner}/{repo}/branches", {
     owner: 'matthewgallo',
     repo: 'ibm-products-vite-template'
