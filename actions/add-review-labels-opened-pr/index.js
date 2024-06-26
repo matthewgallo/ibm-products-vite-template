@@ -58,9 +58,13 @@ async function run() {
 
   // console.log('repoTeams', repoTeams);
 
-  const { data } = await octokit.request("GET /organizations/{org_id}/team/{team_id}", {
-    org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
-    team_id: 'reviewing-team'
+  // `GET /orgs/{org}/teams/{team_slug}`
+  const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}', {
+    org: 'mattgallo-org',
+    team_slug: 'reviewing-team',
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
   });
   const { members_url } = data;
   console.log(data, members_url);
