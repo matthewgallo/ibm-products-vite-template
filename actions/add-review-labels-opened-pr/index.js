@@ -10,8 +10,6 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
-import { Octokit } from "@octokit/rest";
-import { createAppAuth } from "@octokit/auth-app";
 
 async function run() {
   const { context } = github;
@@ -51,15 +49,6 @@ async function run() {
 
   console.log(pullRequest, repository);
 
-  // const { data: repoTeams } = await octokit.rest.repos.listTeams({
-  //   owner: repository.owner,
-  //   repo: repository.name,
-  // });
-
-  // console.log('repoTeams', repoTeams);
-
-  // `GET /orgs/{org}/teams/{team_slug}`
-  // `GET /organizations/{org_id}/team/{team_id}`
   const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}', {
     org: 'mattgallo-org',
     team_slug: 'reviewing-team',
