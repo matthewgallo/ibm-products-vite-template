@@ -9,11 +9,6 @@ jobs:
       pull-requests: write
     if: ${{contains(github.event_name, 'pull_request_target')}}
     steps:
-      - name: Dump GitHub context
-        id: github_context_step
-        run: echo $JSON
-        env:
-          JSON: ${{ toJSON(github) }}
       - uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
       - uses: ./actions/add-review-labels-opened-pr
         with:
