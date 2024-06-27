@@ -1,0 +1,23 @@
+# Save PR review data to as artifact to process in a privileged workflow that is dispatched from this one
+name: Received PR review
+on: [pull_request_review]
+jobs:
+  pr_review_submitted:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+    if: ${{contains(github.event_name, 'pull_request_review')}}
+    # First save github.context (from the unprivileged workflow) and then pass it through to the privileged action
+    # where we have access to repo secrets
+    steps:
+      - name: Save PR data
+        run: |
+          mkdir -p ./pr_data
+          echo ${{ github.context }} > ./pr_data
+      - name: Upload context data
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr_data
+          path: pr_data/
