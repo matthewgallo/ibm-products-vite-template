@@ -15,7 +15,7 @@ jobs:
       - name: Save PR data
         run: |
           mkdir -p ./pr_data
-          echo ${{ toJson(github)}} > ./pr_data/github.json
+          echo ${{ toJson(github.context) }} > ./pr_data/github.json
       - name: Upload context data
         uses: actions/upload-artifact@v3
         with:
