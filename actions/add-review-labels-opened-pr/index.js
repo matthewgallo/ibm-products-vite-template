@@ -21,11 +21,6 @@ async function run() {
   });
   const app = new App({ appId, privateKey, });
   const octokit = await app.getInstallationOctokit(52238220);
-  const resp = await octokit.request("GET /repos/{owner}/{repo}/branches", {
-    owner: 'matthewgallo',
-    repo: 'ibm-products-vite-template'
-  });
-  console.log(resp)
 
   const { pull_request: pullRequest, repository, review, action } = context.payload;
   const { state, draft } = pullRequest;
