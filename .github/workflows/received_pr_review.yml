@@ -12,6 +12,11 @@ jobs:
     # First save github.context (from the unprivileged workflow) and then pass it through to the privileged action
     # where we have access to repo secrets
     steps:
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo $JSON
+        env:
+          JSON: ${{ toJSON(github) }}
       - name: Save context
         env:
           GITHUB_CONTEXT: ${{ toJson(github.context) }}
@@ -25,6 +30,7 @@ jobs:
           mkdir -p ./pr_data
           echo ${{env.GITHUB_CONTEXT}} > ./pr_data/context.json
           echo ${{env.GITHUB_EVENT}} > ./pr_data/event.json
+          echo ${{env.JSON}} > ./pr_data/github.json
       - name: Upload context data
         uses: actions/upload-artifact@v3
         with:
