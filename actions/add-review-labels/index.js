@@ -12,7 +12,8 @@ import core from '@actions/core';
 import { App } from "octokit";
 
 async function run() {
-  const { context } = github;
+  const { context, event } = github;
+  console.log(context, event);
   const appId = core.getInput('APP_ID', {
     required: true,
   });
