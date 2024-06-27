@@ -9,13 +9,19 @@
 
 import github from '@actions/github';
 import core from '@actions/core';
+import { App } from "octokit";
 
 async function run() {
   const { context } = github;
-  const token = core.getInput('GITHUB_TOKEN', {
+  const appId = core.getInput('APP_ID', {
     required: true,
   });
-  const octokit = new github.getOctokit(token);
+  const privateKey = core.getInput('APP_PRIVATE_KEY', {
+    required: true,
+  });
+  const app = new App({ appId, privateKey, });
+  const octokit = await app.getInstallationOctokit(52238220);
+
   const { pull_request: pullRequest, repository, review, action } = context.payload;
   const { state, draft } = pullRequest;
 
@@ -42,31 +48,28 @@ async function run() {
   });
 
   // Get reviewer team data
-  // This won't work currently because it requires using a token separate from GITHUB_TOKEN
-  // which won't work across forks!
-  const { data } = await octokit.rest.teams.getByName({
-    org: 'mattgallo-org', // 'repository.owner.id', hard coding this value while testing in separate repo
+  const { data } = await octokit.request('GET /orgs/{org}/teams/{team_slug}', {
+    org: 'mattgallo-org',
     team_slug: 'reviewing-team',
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
   });
   const { members_url } = data;
+  console.log(data, members_url);
 
-  // Get reviewer team members
-  const retrieveTeamMembers = async () => {
-    const teamMembersUrl = members_url.substring(0, members_url.lastIndexOf('{'));
-    const response = await fetch(teamMembersUrl, {
-      method: "GET",
-      headers: {
-        Accept: 'application/vnd.github+json',
-        Authorization: `Bearer ${token}`,
-        'X-GitHub-Api-Version': '2022-11-28',
-      }
-    });
- 
-    const members = await response.json();
-    return members;
-  }
+  const org_id = members_url.split('organizations/').pop().split('/team')[0];
+  const team_id = members_url.split('team/').pop().split('/members')[0];
+  console.log({org_id, team_id});
+  const {data: teamMembers} = await octokit.request('GET /organizations/{org_id}/team/{team_id}/members', {
+    org_id,
+    team_id,
+    headers: {
+      Accept: 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28',
+    }
+  });
 
-  const teamMembers = await retrieveTeamMembers();
   console.log(teamMembers);
 
   const additionalReviewLabel = 'status: one more review 👀';
