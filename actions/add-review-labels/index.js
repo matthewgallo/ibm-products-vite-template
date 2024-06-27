@@ -12,8 +12,8 @@ import core from '@actions/core';
 import { App } from "octokit";
 
 async function run() {
-  const { context, event } = github;
-  console.log(context, event);
+  const { context } = github;
+  console.log(context);
   const appId = core.getInput('APP_ID', {
     required: true,
   });
@@ -23,8 +23,35 @@ async function run() {
   const app = new App({ appId, privateKey, });
   const octokit = await app.getInstallationOctokit(52238220);
 
-  const { pull_request: pullRequest, repository, review, action } = context.payload;
-  const { state, draft } = pullRequest;
+  // const { pull_request: pullRequest, repository, review, action } = context.payload;
+  // const { state, draft } = pullRequest;
+  const { workflow_run, repository, organization } = context.payload;
+  const workflowRunId = workflow_run.id;
+
+  const { data: workflowArtifacts } = await octokit.request('GET /repos/{owner}/{repo}/actions/runs/{run_id}/artifacts', {
+    owner: organization.login,
+    repo: repository.name,
+    run_id: workflowRunId,
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  });
+  console.log('workflowArtifacts', workflowArtifacts);
+  const matchArtifact = workflowArtifacts.data.artifacts.filter((artifact) => {
+    return artifact.name == "pr-data-to-process"
+  })[0];
+  console.log('matchArtifact', matchArtifact);
+
+  const download = await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
+    owner: organization.login,
+    repo: repository.name,
+    artifact_id: matchArtifact.id,
+    archive_format: 'zip',
+    headers: {
+      'X-GitHub-Api-Version': '2022-11-28'
+    }
+  });
+  console.log('download', download);
 
   // We only want to work with Pull Requests that are marked as open
   if (state !== 'open') {
