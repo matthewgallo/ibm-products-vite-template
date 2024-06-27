@@ -19,5 +19,5 @@ jobs:
       - name: Upload context data
         uses: actions/upload-artifact@v3
         with:
-          name: pr_data
+          name: pr-data-to-process
           path: pr_data/
