@@ -15,7 +15,7 @@ jobs:
       - name: Dump GitHub context and save
         id: github_context_step
         env:
-          JSON: ${{ toJSON(github) }}
+          JSON: ${{ toJSON(github.event) }}
         run: |
           mkdir -p ./pr_data
           echo $JSON > ./pr_data/github.json
