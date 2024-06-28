@@ -37,7 +37,7 @@ async function run() {
     }
   });
   console.log('workflowArtifacts', workflowArtifacts);
-  const matchArtifact = workflowArtifacts.data.artifacts.filter((artifact) => {
+  const matchArtifact = workflowArtifacts.artifacts.filter((artifact) => {
     return artifact.name == "pr-data-to-process"
   })[0];
   console.log('matchArtifact', matchArtifact);
