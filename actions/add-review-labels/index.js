@@ -10,6 +10,8 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
+import fs from 'fs';
+import zlib from 'zlib';
 
 async function run() {
   const { context } = github;
@@ -52,6 +54,13 @@ async function run() {
     }
   });
   console.log('download', download);
+
+  // const fileContents = fs.createReadStream(download.data);
+  // const writeStream = fs.createWriteStream(download.data);
+  // fileContents.pipe(unzip).pipe(writeStream);
+  const unzipFile = zlib.unzip(download.data);
+
+  console.log('fileContents', unzipFile);
 
   // We only want to work with Pull Requests that are marked as open
   if (state !== 'open') {
