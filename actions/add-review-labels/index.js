@@ -10,7 +10,7 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
-import { gzip, ungzip } from 'node-gzip';
+const { ungzip } = require('node-gzip');
 
 async function run() {
   const { context } = github;
