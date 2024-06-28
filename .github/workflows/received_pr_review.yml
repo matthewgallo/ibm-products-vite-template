@@ -21,7 +21,7 @@ jobs:
         id: save_data
         run: |
           mkdir -p ./pr_data
-          echo ${{ toJson(github) }} > ./pr_data/github.json
+          echo ${{ env.JSON }} > ./pr_data/github.json
       - name: Upload context data
         id: upload_artifact
         uses: actions/upload-artifact@v3
