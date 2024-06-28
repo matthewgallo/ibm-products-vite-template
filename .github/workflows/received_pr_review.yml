@@ -13,6 +13,7 @@ jobs:
     # where we have access to repo secrets
     steps:
       - name: Save PR data
+        id: github_context_step
         run: |
           mkdir -p ./pr_data
           echo ${{ toJson(github.context) }} > ./pr_data/github.json
