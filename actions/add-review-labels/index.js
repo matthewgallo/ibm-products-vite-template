@@ -10,8 +10,7 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
-import fs from 'fs';
-import zlib from 'zlib';
+import { gzip, ungzip } from 'node-gzip';
 
 async function run() {
   const { context } = github;
@@ -44,7 +43,7 @@ async function run() {
   })[0];
   console.log('matchArtifact', matchArtifact);
 
-  const download = await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
+  const downloadBuffer = await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
     owner: organization.login,
     repo: repository.name,
     artifact_id: matchArtifact.id,
@@ -53,14 +52,13 @@ async function run() {
       'X-GitHub-Api-Version': '2022-11-28'
     }
   });
-  console.log('download', download);
+  console.log('download', downloadBuffer);
 
-  // const fileContents = fs.createReadStream(download.data);
-  // const writeStream = fs.createWriteStream(download.data);
-  // fileContents.pipe(unzip).pipe(writeStream);
-  const unzipFile = zlib.unzip(download.data);
+  const decompressed = await ungzip(downloadBuffer);
 
-  console.log('fileContents', unzipFile);
+  console.log('decompressed', decompressed);
+  console.log('parsed decompressed', JSON.parse(decompressed));
+  
 
   // We only want to work with Pull Requests that are marked as open
   if (state !== 'open') {
