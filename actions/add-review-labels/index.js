@@ -10,7 +10,7 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
-const { ungzip } = require('node-gzip');
+import anzip from 'anzip';
 
 async function run() {
   const { context } = github;
@@ -43,7 +43,7 @@ async function run() {
   })[0];
   console.log('matchArtifact', matchArtifact);
 
-  const downloadBuffer = await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
+  const artifactResponse = await octokit.request('GET /repos/{owner}/{repo}/actions/artifacts/{artifact_id}/{archive_format}', {
     owner: organization.login,
     repo: repository.name,
     artifact_id: matchArtifact.id,
@@ -52,16 +52,18 @@ async function run() {
       'X-GitHub-Api-Version': '2022-11-28'
     }
   });
-  console.log('download', downloadBuffer);
+  console.log('artifact response: ', artifactResponse);
 
-  const decompressed = await ungzip(downloadBuffer);
+  // Unzip the artifact to read initial review PR data from a privileged workflow
+  const output = await anzip(artifactResponse.url, { pattern: /(^(?!\.))(.+(.json))$/i, outputPath: './', outputContent: true });
+  const artifactData = JSON.parse(new TextDecoder().decode(output.files[0].content));
 
-  console.log('decompressed', decompressed);
-  console.log('parsed decompressed', JSON.parse(decompressed));
-  
-
+  console.log('artifactData: ', artifactData);
+  const { pull_request: pullRequest, review } = artifactData;
+  const { state: prState, draft } = pullRequest;
+    
   // We only want to work with Pull Requests that are marked as open
-  if (state !== 'open') {
+  if (prState !== 'open') {
     return;
   }
 
@@ -96,6 +98,7 @@ async function run() {
   const org_id = members_url.split('organizations/').pop().split('/team')[0];
   const team_id = members_url.split('team/').pop().split('/members')[0];
   console.log({org_id, team_id});
+
   const {data: teamMembers} = await octokit.request('GET /organizations/{org_id}/team/{team_id}/members', {
     org_id,
     team_id,
