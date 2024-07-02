@@ -55,7 +55,10 @@ async function run() {
   console.log('artifact response: ', artifactResponse);
 
   // Decode the array buffer from the artifact to read initial review PR data from a privileged workflow
-  const decodedArtifact = JSON.parse(new util.TextDecoder().decode(artifactResponse.data));
+
+  const convertedBuffer = Buffer.from(artifactResponse.data);
+  console.log('convertedBuffer', convertedBuffer);
+  const decodedArtifact = JSON.parse(new util.TextDecoder().decode(convertedBuffer));
 
   console.log('artifactData: ', decodedArtifact);
   const { pull_request: pullRequest, review } = decodedArtifact;
