@@ -10,7 +10,7 @@
 import github from '@actions/github';
 import core from '@actions/core';
 import { App } from "octokit";
-import anzip from 'anzip';
+import util from 'util';
 
 async function run() {
   const { context } = github;
@@ -55,7 +55,7 @@ async function run() {
   console.log('artifact response: ', artifactResponse);
 
   // Decode the array buffer from the artifact to read initial review PR data from a privileged workflow
-  const decodedArtifact = JSON.parse(new TextDecoder.decode(artifactResponse.data));
+  const decodedArtifact = JSON.parse(new util.TextDecoder.decode(artifactResponse.data));
 
   console.log('artifactData: ', decodedArtifact);
   const { pull_request: pullRequest, review } = decodedArtifact;

@@ -21,7 +21,6 @@
   "dependencies": {
     "@actions/core": "^1.2.3",
     "@actions/github": "^6.0.0",
-    "anzip": "^0.2.0",
     "octokit": "^4.0.2"
   }
 }
