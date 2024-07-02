@@ -58,9 +58,11 @@ async function run() {
 
   const convertedBuffer = Buffer.from(artifactResponse.data);
   console.log('convertedBuffer', convertedBuffer);
-  const decodedArtifact = JSON.parse(new util.TextDecoder().decode(convertedBuffer));
+  const decodedArtifact = new util.TextDecoder().decode(convertedBuffer);
+  console.log('decodedArtifact', decodedArtifact);
+  const parsedDecodedArtifact = JSON.parse(decodedArtifact);
 
-  console.log('artifactData: ', decodedArtifact);
+  console.log('artifactData: ', parsedDecodedArtifact);
   const { pull_request: pullRequest, review } = decodedArtifact;
   const { state: prState, draft } = pullRequest;
     
