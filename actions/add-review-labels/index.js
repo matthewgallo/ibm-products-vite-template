@@ -54,12 +54,11 @@ async function run() {
   });
   console.log('artifact response: ', artifactResponse);
 
-  // Unzip the artifact to read initial review PR data from a privileged workflow
-  const output = await anzip(artifactResponse.url, { pattern: /(^(?!\.))(.+(.json))$/i, outputPath: './', outputContent: true });
-  const artifactData = JSON.parse(new TextDecoder().decode(output.files[0].content));
+  // Decode the array buffer from the artifact to read initial review PR data from a privileged workflow
+  const decodedArtifact = JSON.parse(new TextDecoder.decode(artifactResponse.data));
 
-  console.log('artifactData: ', artifactData);
-  const { pull_request: pullRequest, review } = artifactData;
+  console.log('artifactData: ', decodedArtifact);
+  const { pull_request: pullRequest, review } = decodedArtifact;
   const { state: prState, draft } = pullRequest;
     
   // We only want to work with Pull Requests that are marked as open
